@@ -8,5 +8,8 @@
   },
   "repository": "git://github.com/alanshaw/node-round-robin.git",
   "author": "Alan Shaw",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "async": "~0.2.9"
+  }
 }
