@@ -1,4 +1,4 @@
-Round Robin
+Round Robin [![Dependency Status](https://david-dm.org/alanshaw/node-round-robin.png)](https://david-dm.org/alanshaw/node-round-robin)
 ===
 
 Create consumers that expire after a certain time period or task count that are schedulised to be used in a round robin fashion.
