@@ -1,4 +1,4 @@
-Round Robin [![Dependency Status](https://david-dm.org/alanshaw/node-round-robin.png)](https://david-dm.org/alanshaw/node-round-robin)
+Round Robin [![Dependency Status](https://david-dm.org/alanshaw/node-round-robin.png)](https://david-dm.org/alanshaw/node-round-robin) [![Build Status](https://travis-ci.org/alanshaw/node-round-robin.png)](https://travis-ci.org/alanshaw/node-round-robin)
 ===
 
 NOT READY FOR USE.
