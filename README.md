@@ -1,6 +1,8 @@
 Round Robin [![Dependency Status](https://david-dm.org/alanshaw/node-round-robin.png)](https://david-dm.org/alanshaw/node-round-robin)
 ===
 
+NOT READY FOR USE.
+
 Create consumers that expire after a certain time period or task count that are schedulised to be used in a round robin fashion.
 
 How to
@@ -26,21 +28,22 @@ var scheduler = new RoundRobin({
   
   maxUp: 10, // Allow at most 10 things to be spun up at once
   maxTasks: 100, // Allow the thing to be used 100 times before it is spun down
-  maxAge: 1000 * 60 * 60 // Allow the thing to live for an hour before it is spun down
-})
+  maxAge: 1000 * 60 * 60, // Allow the thing to live for an hour before it is spun down
+  lazySpinDown: true // Spin down lazily (avoids the polling interval processing)
+});
 
 // Use the scheduler to get the things to perform tasks every second
 setInterval(function () {
   scheduler.get(function (er, thing) {
     thing.doTask();
   })
-}, 1000)
+}, 1000);
 
 // Finish doing tasks after 5 minutes
 setTimeout(function () {
   scheduler.destroy(function (er) {
     console.log("Finished doing tasks");
   })
-}, 1000 * 60 * 5)
+}, 1000 * 60 * 5);
 
 ```
