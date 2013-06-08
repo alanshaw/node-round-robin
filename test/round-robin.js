@@ -19,10 +19,10 @@ describe("RoundRobin", function () {
     
     var tasks = []
     
-    function createUsageTask (id) {
+    function createUsageTask (i) {
       return function (cb) {
         setTimeout(function () {
-          console.log("Getting consumer", id);
+          console.log("Getting a consumer x" + i);
           scheduler.get(function (er, consumer) {
             if (er) return cb(er)
             consumer.usage++

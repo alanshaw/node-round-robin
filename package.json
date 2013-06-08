@@ -4,7 +4,8 @@
   "description": "Round robin task scheduler",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "coveralls": "jscoverage lib && ROUNDROBIN_COV=1 mocha -R mocha-lcov-reporter | coveralls"
   },
   "repository": "git://github.com/alanshaw/node-round-robin.git",
   "author": "Alan Shaw",
@@ -13,6 +14,9 @@
     "async": "~0.2.9"
   },
   "devDependencies": {
-    "mocha": "~1.10.0"
+    "mocha": "~1.10.0",
+    "mocha-lcov-reporter": "0.0.1",
+    "coveralls": "~2.0.9",
+    "jscoverage": "~0.3.7"
   }
 }

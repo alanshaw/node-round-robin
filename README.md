@@ -32,7 +32,7 @@ var scheduler = new RoundRobin({
   lazySpinDown: true // Spin down lazily (avoids the polling interval processing)
 });
 
-// Use the scheduler to get the things to perform tasks every second
+// Use the scheduler to get a thing and perform a task every second
 setInterval(function () {
   scheduler.get(function (er, thing) {
     thing.doTask();
