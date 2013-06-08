@@ -1,4 +1,4 @@
-Round Robin [![Dependency Status](https://david-dm.org/alanshaw/node-round-robin.png)](https://david-dm.org/alanshaw/node-round-robin) [![Build Status](https://travis-ci.org/alanshaw/node-round-robin.png)](https://travis-ci.org/alanshaw/node-round-robin)
+Round Robin [![Dependency Status](https://david-dm.org/alanshaw/node-round-robin.png)](https://david-dm.org/alanshaw/node-round-robin) [![Build Status](https://travis-ci.org/alanshaw/node-round-robin.png)](https://travis-ci.org/alanshaw/node-round-robin) [![Coverage Status](https://coveralls.io/repos/alanshaw/node-round-robin/badge.png?branch=master)](https://coveralls.io/r/alanshaw/node-round-robin?branch=master)
 ===
 
 NOT READY FOR USE.
