@@ -1,15 +1,18 @@
 {
   "name": "round-robin",
   "version": "0.0.0",
-  "description": "",
+  "description": "Round robin task scheduler",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": "git://github.com/alanshaw/node-round-robin.git",
   "author": "Alan Shaw",
   "license": "MIT",
   "dependencies": {
     "async": "~0.2.9"
+  },
+  "devDependencies": {
+    "mocha": "~1.10.0"
   }
 }
