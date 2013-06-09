@@ -33,7 +33,7 @@ var scheduler = new RoundRobin({
 });
 
 // Use the scheduler to get a thing and perform a task every second
-setInterval(function () {
+var intervalId = setInterval(function () {
   scheduler.get(function (er, thing) {
     thing.doTask();
   })
@@ -41,6 +41,8 @@ setInterval(function () {
 
 // Finish doing tasks after 5 minutes
 setTimeout(function () {
+  clearInterval(intervalId);
+  
   scheduler.destroy(function (er) {
     console.log("Finished doing tasks");
   })
