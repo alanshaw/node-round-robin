@@ -128,4 +128,29 @@ describe("RoundRobin", function () {
       done()
     })
   })
+  
+  it("should spin down consumers when destroyed", function (done) {
+    
+    var consumer = {destroyed: false}
+    
+    var scheduler = new RoundRobin({
+      spinUp: function (cb) {
+        cb(null, consumer)
+      },
+      spinDown: function (consumer, cb) {
+        consumer.destroyed = true
+        cb()
+      }
+    })
+    
+    scheduler.get(function (er, consumer) {
+      assert.ifError(er)
+      assert.strictEqual(false, consumer.destroyed)
+      
+      scheduler.destroy(function () {
+        assert(consumer.destroyed)
+        done()
+      })
+    })
+  })
 })
