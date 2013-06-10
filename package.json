@@ -1,6 +1,6 @@
 {
   "name": "round-robin",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Round robin task scheduler",
   "main": "index.js",
   "scripts": {
