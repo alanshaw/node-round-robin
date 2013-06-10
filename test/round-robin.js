@@ -129,13 +129,70 @@ describe("RoundRobin", function () {
     })
   })
   
-  it("should spin down consumers when destroyed", function (done) {
+  it("should lazily spin down consumers when expired", function (done) {
     
-    var consumer = {destroyed: false}
+    var spunUpConsumers = []
+      , spunDownConsumers = []
     
     var scheduler = new RoundRobin({
       spinUp: function (cb) {
+        var consumer = {destroyed: false}
+        spunUpConsumers.push(consumer)
         cb(null, consumer)
+      },
+      spinDown: function (consumer, cb) {
+        consumer.destroyed = true
+        spunDownConsumers.push(consumer)
+        cb()
+      },
+      maxUp: 2,
+      maxAge: 500
+    })
+    
+    // Create 2 consumers
+    scheduler.get(function (er, consumer) {
+      assert.ifError(er)
+      assert(consumer)
+      
+      assert.equal(1, spunUpConsumers.length)
+      assert.equal(0, spunDownConsumers.length)
+      
+      scheduler.get(function (er, consumer) {
+        assert.ifError(er)
+        assert(consumer)
+        
+        assert.equal(2, spunUpConsumers.length)
+        assert.equal(0, spunDownConsumers.length)
+        
+        // Get 2 more consumers once the current two have expired
+        setTimeout(function () {
+          
+          // Because the scheduler lazily spins down consumers, here, we should not have any destroyed consumers
+          assert.equal(2, spunUpConsumers.length)
+          assert.equal(0, spunDownConsumers.length)
+          
+          spunUpConsumers.forEach(function (consumer) {
+            assert(!consumer.destroyed)
+          })
+          
+          // Now get (and hopefully create) two more consumers
+          scheduler.get(function (er, consumer) {
+            scheduler.get(function (er, consumer) {
+              assert.equal(4, spunUpConsumers.length)
+              assert.equal(2, spunDownConsumers.length)
+              done()
+            })
+          })
+        }, 1000)
+      })
+    })
+  })
+  
+  it("should spin down consumers when destroyed", function (done) { 
+    
+    var scheduler = new RoundRobin({
+      spinUp: function (cb) {
+        cb(null, {destroyed: false})
       },
       spinDown: function (consumer, cb) {
         consumer.destroyed = true
