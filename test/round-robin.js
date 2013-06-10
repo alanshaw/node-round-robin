@@ -188,6 +188,67 @@ describe("RoundRobin", function () {
     })
   })
   
+  it("should eagerly spin down consumers when expired", function (done) {
+    this.timeout(3000)
+    
+    var spunUpConsumers = []
+      , spunDownConsumers = []
+    
+    var scheduler = new RoundRobin({
+      spinUp: function (cb) {
+        var consumer = {destroyed: false}
+        spunUpConsumers.push(consumer)
+        cb(null, consumer)
+      },
+      spinDown: function (consumer, cb) {
+        consumer.destroyed = true
+        spunDownConsumers.push(consumer)
+        cb()
+      },
+      maxUp: 2,
+      maxAge: 500,
+      lazySpinDown: false
+    })
+    
+    // Create 2 consumers
+    scheduler.get(function (er, consumer) {
+      assert.ifError(er)
+      assert(consumer)
+      
+      assert.equal(1, spunUpConsumers.length)
+      assert.equal(0, spunDownConsumers.length)
+      
+      scheduler.get(function (er, consumer) {
+        assert.ifError(er)
+        assert(consumer)
+        
+        assert.equal(2, spunUpConsumers.length)
+        assert.equal(0, spunDownConsumers.length)
+        
+        // Get 2 more consumers once the current two have expired
+        setTimeout(function () {
+          
+          // Because the scheduler eagerly spins down consumers, here, we should have destroyed the two consumers
+          assert.equal(2, spunUpConsumers.length)
+          assert.equal(2, spunDownConsumers.length)
+          
+          spunUpConsumers.forEach(function (consumer) {
+            assert(consumer.destroyed)
+          })
+          
+          // Now get (and hopefully create) two more consumers
+          scheduler.get(function (er, consumer) {
+            scheduler.get(function (er, consumer) {
+              assert.equal(4, spunUpConsumers.length)
+              assert.equal(2, spunDownConsumers.length)
+              done()
+            })
+          })
+        }, 2000)
+      })
+    })
+  })
+  
   it("should spin down consumers when destroyed", function (done) { 
     
     var scheduler = new RoundRobin({
