@@ -29,6 +29,7 @@ describe("RoundRobin", function () {
         scheduler.get(function (er, consumer) {
           if (er) return cb(er)
           consumer.usage++
+          scheduler.ret(consumer)
           cb(er, consumer)
         })
       }
@@ -95,6 +96,7 @@ describe("RoundRobin", function () {
           scheduler.get(function (er, consumer) {
             if (er) return cb(er)
             consumer.usage++
+            scheduler.ret(consumer)
             console.log("Consumer", consumer.id, "performed task")
             cb(er, consumer)
           })
@@ -150,19 +152,22 @@ describe("RoundRobin", function () {
     })
     
     // Create 2 consumers
-    scheduler.get(function (er, consumer) {
+    scheduler.get(function (er, c1) {
       assert.ifError(er)
-      assert(consumer)
+      assert(c1)
       
       assert.equal(1, spunUpConsumers.length)
       assert.equal(0, spunDownConsumers.length)
       
-      scheduler.get(function (er, consumer) {
+      scheduler.get(function (er, c2) {
         assert.ifError(er)
-        assert(consumer)
+        assert(c2)
         
         assert.equal(2, spunUpConsumers.length)
         assert.equal(0, spunDownConsumers.length)
+        
+        scheduler.ret(c1)
+        scheduler.ret(c2)
         
         // Get 2 more consumers once the current two have expired
         setTimeout(function () {
@@ -176,10 +181,15 @@ describe("RoundRobin", function () {
           })
           
           // Now get (and hopefully create) two more consumers
-          scheduler.get(function (er, consumer) {
-            scheduler.get(function (er, consumer) {
+          scheduler.get(function (er, c1) {
+            
+            scheduler.get(function (er, c2) {
               assert.equal(4, spunUpConsumers.length)
               assert.equal(2, spunDownConsumers.length)
+              
+              scheduler.ret(c1)
+              scheduler.ret(c2)
+              
               done()
             })
           })
@@ -211,19 +221,22 @@ describe("RoundRobin", function () {
     })
     
     // Create 2 consumers
-    scheduler.get(function (er, consumer) {
+    scheduler.get(function (er, c1) {
       assert.ifError(er)
-      assert(consumer)
+      assert(c1)
       
       assert.equal(1, spunUpConsumers.length)
       assert.equal(0, spunDownConsumers.length)
       
-      scheduler.get(function (er, consumer) {
+      scheduler.get(function (er, c2) {
         assert.ifError(er)
-        assert(consumer)
+        assert(c2)
         
         assert.equal(2, spunUpConsumers.length)
         assert.equal(0, spunDownConsumers.length)
+        
+        scheduler.ret(c1)
+        scheduler.ret(c2)
         
         // Get 2 more consumers once the current two have expired
         setTimeout(function () {
@@ -237,10 +250,14 @@ describe("RoundRobin", function () {
           })
           
           // Now get (and hopefully create) two more consumers
-          scheduler.get(function (er, consumer) {
-            scheduler.get(function (er, consumer) {
+          scheduler.get(function (er, c1) {
+            scheduler.get(function (er, c2) {
               assert.equal(4, spunUpConsumers.length)
               assert.equal(2, spunDownConsumers.length)
+              
+              scheduler.ret(c1)
+              scheduler.ret(c2)
+              
               done()
             })
           })
@@ -270,19 +287,22 @@ describe("RoundRobin", function () {
     })
     
     // Create 2 consumers
-    scheduler.get(function (er, consumer) {
+    scheduler.get(function (er, c1) {
       assert.ifError(er)
-      assert(consumer)
+      assert(c1)
       
       assert.equal(1, spunUpConsumers.length)
       assert.equal(0, spunDownConsumers.length)
       
-      scheduler.get(function (er, consumer) {
+      scheduler.get(function (er, c2) {
         assert.ifError(er)
-        assert(consumer)
+        assert(c2)
         
         assert.equal(2, spunUpConsumers.length)
         assert.equal(0, spunDownConsumers.length)
+        
+        scheduler.ret(c1)
+        scheduler.ret(c2)
         
         // Get 2 more consumers once the current two have expired
         setTimeout(function () {
@@ -296,10 +316,14 @@ describe("RoundRobin", function () {
           })
           
           // Now get (and hopefully create) two more consumers
-          scheduler.get(function (er, consumer) {
-            scheduler.get(function (er, consumer) {
+          scheduler.get(function (er, c1) {
+            scheduler.get(function (er, c2) {
               assert.equal(4, spunUpConsumers.length)
               assert.equal(2, spunDownConsumers.length)
+              
+              scheduler.ret(c1)
+              scheduler.ret(c2)
+          
               done()
             })
           })
@@ -331,19 +355,22 @@ describe("RoundRobin", function () {
     })
     
     // Create 2 consumers
-    scheduler.get(function (er, consumer) {
+    scheduler.get(function (er, c1) {
       assert.ifError(er)
-      assert(consumer)
+      assert(c1)
       
       assert.equal(1, spunUpConsumers.length)
       assert.equal(0, spunDownConsumers.length)
       
-      scheduler.get(function (er, consumer) {
+      scheduler.get(function (er, c2) {
         assert.ifError(er)
-        assert(consumer)
+        assert(c2)
         
         assert.equal(2, spunUpConsumers.length)
         assert.equal(0, spunDownConsumers.length)
+        
+        scheduler.ret(c1)
+        scheduler.ret(c2)
         
         // Get 2 more consumers once the current two have expired
         setTimeout(function () {
@@ -357,10 +384,14 @@ describe("RoundRobin", function () {
           })
           
           // Now get (and hopefully create) two more consumers
-          scheduler.get(function (er, consumer) {
-            scheduler.get(function (er, consumer) {
+          scheduler.get(function (er, c1) {
+            scheduler.get(function (er, c2) {
               assert.equal(4, spunUpConsumers.length)
               assert.equal(2, spunDownConsumers.length)
+              
+              scheduler.ret(c1)
+              scheduler.ret(c2)
+              
               done()
             })
           })
@@ -384,6 +415,8 @@ describe("RoundRobin", function () {
     scheduler.get(function (er, consumer) {
       assert.ifError(er)
       assert.strictEqual(false, consumer.destroyed)
+      
+      scheduler.ret(consumer)
       
       scheduler.destroy(function () {
         assert(consumer.destroyed)
