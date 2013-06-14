@@ -34,6 +34,7 @@ var scheduler = new RoundRobin({
 var intervalId = setInterval(function () {
   scheduler.get(function (er, thing) {
     thing.doTask();
+    scheduler.ret(thing); // Return the thing so the scheduler can hand it out again
   })
 }, 1000);
 
