@@ -25,7 +25,7 @@ var scheduler = new RoundRobin({
   },
   
   maxUp: 10, // Allow at most 10 things to be spun up at once
-  maxTasks: 100, // Allow the thing to be used 100 times before it is spun down
+  maxUsage: 100, // Allow the thing to be used 100 times before it is spun down
   maxAge: 1000 * 60 * 60, // Allow the thing to live for an hour before it is spun down
   lazySpinDown: true // Spin down lazily (avoids the polling interval processing)
 });
