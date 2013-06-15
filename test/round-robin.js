@@ -429,7 +429,7 @@ describe("RoundRobin", function () {
     
     var scheduler = new RoundRobin({
       spinUp: function (cb) {
-        var consumer = {returnCount: 0}
+        var consumer = {}
         cb(null, consumer)
       },
       spinDown: function (consumer, cb) {
@@ -461,6 +461,28 @@ describe("RoundRobin", function () {
           scheduler.ret(c1)
         }, 500)
       })
+    })
+  })
+  
+  it("should throw an error if you try to return a consumer the scheduler does not know about", function (done) {
+    
+    var scheduler = new RoundRobin({
+      spinUp: function (cb) {
+        cb(null, {})
+      },
+      spinDown: function (consumer, cb) {
+        cb()
+      }
+    })
+    
+    scheduler.get(function (er) {
+      assert.ifError(er)
+      
+      assert.throws(function () {
+        scheduler.ret({})
+      })
+      
+      done()
     })
   })
 })
