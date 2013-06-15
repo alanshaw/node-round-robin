@@ -424,4 +424,43 @@ describe("RoundRobin", function () {
       })
     })
   })
+  
+  it("should eventually return a consumer when all consumers are in use", function (done) {
+    
+    var scheduler = new RoundRobin({
+      spinUp: function (cb) {
+        var consumer = {returnCount: 0}
+        cb(null, consumer)
+      },
+      spinDown: function (consumer, cb) {
+        cb()
+      },
+      maxUp: 2
+    })
+    
+    // Create 2 consumers
+    scheduler.get(function (er, c1) {
+      assert.ifError(er)
+      assert(c1)
+      
+      scheduler.get(function (er, c2) {
+        assert.ifError(er)
+        assert(c2)
+        
+        var c1Returned = false
+        
+        // Because c1 and c2 have not been returned, c3 should not be "got" until c1 or c2 are returned
+        scheduler.get(function (er, c3) {
+          assert(c1Returned) 
+          assert.strictEqual(c1, c3)
+          done()
+        })
+        
+        setTimeout(function () {
+          c1Returned = true
+          scheduler.ret(c1)
+        }, 500)
+      })
+    })
+  })
 })
